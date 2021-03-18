@@ -1,0 +1,3 @@
+[submodule "covid19_preprints"]
+	path = covid19_preprints
+	url = https://github.com/nicholasmfraser/covid19_preprints.git

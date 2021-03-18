@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "prescope"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+license = "Apache-2.0"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+jupyterlab = "^3.0.10"
+gensim = "^3.8.3"
+spacy = "^3.0.5"
+scikit-learn = "^0.24.1"
+matplotlib = "^3.3.4"
+umap-learn = {extras = ["plot"], version = "^0.5.1"}
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
