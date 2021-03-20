@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/MarkerCluster.css">
+        <link rel="stylesheet" href="css/MarkerCluster.Default.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet.markercluster.js"></script>
+        <script src="data/covid_preprints_projects_0.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+            highlightLayer.openPopup();
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[-80.04483190511515,-126.15705384942018],[83.4655993845577,183.7305972508254]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        function pop_covid_preprints_projects_0(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['field_1'] !== null ? autolinker.link(feature.properties['field_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['tsne_coordinates'] !== null ? autolinker.link(feature.properties['tsne_coordinates'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['umap_coordinates'] !== null ? autolinker.link(feature.properties['umap_coordinates'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">source</th>\
+                        <td>' + (feature.properties['source'] !== null ? autolinker.link(feature.properties['source'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['identifier'] !== null ? autolinker.link(feature.properties['identifier'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['identifier_type'] !== null ? autolinker.link(feature.properties['identifier_type'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">posted_date</th>\
+                        <td>' + (feature.properties['posted_date'] !== null ? autolinker.link(feature.properties['posted_date'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>title</strong><br />' + (feature.properties['title'] !== null ? autolinker.link(feature.properties['title'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['abstract'] !== null ? autolinker.link(feature.properties['abstract'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['tsne_x'] !== null ? autolinker.link(feature.properties['tsne_x'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['tsne_y'] !== null ? autolinker.link(feature.properties['tsne_y'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_covid_preprints_projects_0_0(feature) {
+            switch(String(feature.properties['source'])) {
+                case 'AfricArXiv (OSF)':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(179,220,122,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'AgriXiv (OSF)':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(106,156,226,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'arXiv':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(22,201,28,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'Authorea':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(77,229,153,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'BioHackrXiv (OSF)':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(96,112,233,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'bioRxiv':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(74,202,160,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'Cambridge University Press':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(92,227,137,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'ChemRxiv':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(229,136,113,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'Copernicus GmbH':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(235,89,240,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'EcoEvoRxiv (OSF)':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(187,98,235,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'EdArXiv (OSF)':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(43,239,233,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'engrXiv (OSF)':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(29,233,196,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'ESSOAR':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(56,47,231,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'Figshare':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(170,213,51,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'Frenxiv (OSF)':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(102,203,65,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'INA-Rxiv (OSF)':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(101,190,201,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'IndiaRxiv (OSF)':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(234,187,100,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'JMIR':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(151,133,223,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'LawArXiv (OSF)':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(61,162,239,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'MediArXiv (OSF)':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(68,205,93,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'medRxiv':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(134,208,124,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'MetaArXiV (OSF)':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(235,229,48,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'NutriXiv (OSF)':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(232,50,156,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'OSF Preprints':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(208,64,124,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'Preprints.org':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(213,95,182,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'PsyArXiv (OSF)':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(191,58,221,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'RePEc':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(102,195,231,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'Research Square':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(95,20,235,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'ResearchGate':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(215,104,117,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'SAGE':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(230,40,91,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'SciELO':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(55,100,222,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'ScienceOpen':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(185,203,51,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'SocArXiv (OSF)':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(233,18,208,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'SportRxiv (OSF)':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(232,151,107,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'SSRN':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(144,203,98,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'Techrxiv (IEEE)':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(218,188,67,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'WHO':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(235,125,122,1.0)',
+                interactive: false,
+            }
+                    break;
+                case 'Zenodo':
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(236,161,85,1.0)',
+                interactive: false,
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_covid_preprints_projects_0',
+                radius: 4.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(147,80,214,1.0)',
+                interactive: false,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_covid_preprints_projects_0');
+        map.getPane('pane_covid_preprints_projects_0').style.zIndex = 400;
+        map.getPane('pane_covid_preprints_projects_0').style['mix-blend-mode'] = 'normal';
+        var layer_covid_preprints_projects_0 = new L.geoJson(json_covid_preprints_projects_0, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_covid_preprints_projects_0',
+            layerName: 'layer_covid_preprints_projects_0',
+            pane: 'pane_covid_preprints_projects_0',
+            onEachFeature: pop_covid_preprints_projects_0,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_covid_preprints_projects_0_0(feature));
+            },
+        });
+        var cluster_covid_preprints_projects_0 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_covid_preprints_projects_0.addLayer(layer_covid_preprints_projects_0);
+
+        bounds_group.addLayer(layer_covid_preprints_projects_0);
+        cluster_covid_preprints_projects_0.addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
